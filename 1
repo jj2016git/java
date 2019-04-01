@@ -1,0 +1,26 @@
+docker multi-stage构建：https://www.jb51.net/article/136260.htm
+将之前阶段构建的文件copy到最后一个阶段，打镜像
+只有最后一个阶段的构建才会作为镜像的层
+
+需要docker 17.05以上：需要试验
+
+k8s configMap
+1. create configmap: 可以将文本文件load到configmap中
+`kubectl create configmap <map-name> <data-source>`
+- data-source
+	- directory
+	- file
+	- literal value
+- datasource对应key-value
+	- key = file name或key
+	- value = 文件内容或value
+- kubectl describe/kubectl get可以获得configmap详情
+`kubectl create configmap <map-name> --from-file=<dir>`
+
+
+2. 使用configmap:
+
+
+
+docker environment
+docker run --env-file ./env.list ubuntu bash

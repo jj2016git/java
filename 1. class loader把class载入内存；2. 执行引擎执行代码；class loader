@@ -1,0 +1,8 @@
+1. class loader把class载入内存；2. 执行引擎执行代码；class loader加载.class文件，初始化成Class对象；为什么双亲委派：沙箱安全。沙箱安全：不让jdk代码被篡改
+native method stack中登记native方法，在execution engine执行时加载native方法；本地方法接口调用本地方法库。编译期，将局部变量放到局部变量表里面。PC寄存器：每个线程私有，记录下一条指令行号。方法区：所有线程共享，存类信息，static成员，常量。堆和方法区可以GC。方法区是规范，jdk7永久代，jdk8 meta space是对规范的实现。
+
+
+asm生成类对象。2. 栈：线程独有，存放8种基本类型，对象的引用变量，实例方法。栈保存本地变量，栈操作（出栈、入栈操作），class file
+
+方法区里的常量引用堆里的对象？？？？
+逃逸对象？？？？

@@ -1,0 +1,2 @@
+docker hub: https://registry-1.docker.io/
+docker mirror: https://registry.docker-cn.com

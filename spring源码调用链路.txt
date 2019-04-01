@@ -1,0 +1,80 @@
+org.springframework.context.annotation.AnnotationConfigApplicationContext#AnnotationConfigApplicationContext(java.lang.String...)
+-> org.springframework.context.annotation.AnnotationConfigApplicationContext#scan
+	-> org.springframework.context.annotation.ClassPathBeanDefinitionScanner#scan
+		-> 
+-> org.springframework.context.support.AbstractApplicationContext#refresh
+
+
+
+
+
+
+
+
+
+
+
+
+IOC入口：
+org.springframework.context.support.ClassPathXmlApplicationContext#ClassPathXmlApplicationContext(java.lang.String[], boolean, org.springframework.context.ApplicationContext)
+-> org.springframework.context.support.AbstractRefreshableConfigApplicationContext#setConfigLocations
+	-> org.springframework.context.support.AbstractRefreshableConfigApplicationContext#resolvePath
+-> org.springframework.context.support.AbstractApplicationContext#refresh
+	-> org.springframework.context.support.AbstractApplicationContext#obtainFreshBeanFactory
+		-> org.springframework.context.support.AbstractApplicationContext#refreshBeanFactory
+			-> org.springframework.context.support.AbstractRefreshableApplicationContext#loadBeanDefinitions
+				-> org.springframework.context.support.AbstractRefreshableApplicationContext#loadBeanDefinitions
+					-> org.springframework.context.support.AbstractXmlApplicationContext#loadBeanDefinitions(org.springframework.beans.factory.support.DefaultListableBeanFactory)
+						-> org.springframework.context.support.AbstractXmlApplicationContext#loadBeanDefinitions(org.springframework.beans.factory.xml.XmlBeanDefinitionReader)
+							-> org.springframework.beans.factory.support.AbstractBeanDefinitionReader#loadBeanDefinitions(java.lang.String...)
+								-> org.springframework.beans.factory.support.AbstractBeanDefinitionReader#loadBeanDefinitions(java.lang.String, java.util.Set<org.springframework.core.io.Resource>)
+									-> org.springframework.context.support.AbstractApplicationContext#getResources
+										-> org.springframework.core.io.support.PathMatchingResourcePatternResolver#getResources
+									-> org.springframework.beans.factory.support.AbstractBeanDefinitionReader#loadBeanDefinitions(org.springframework.core.io.Resource...)
+										-> org.springframework.beans.factory.xml.XmlBeanDefinitionReader#loadBeanDefinitions(org.springframework.core.io.Resource)
+									-> org.springframework.beans.factory.xml.XmlBeanDefinitionReader#doLoadBeanDefinitions
+										-> org.springframework.beans.factory.xml.XmlBeanDefinitionReader#registerBeanDefinitions
+											-> org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#registerBeanDefinitions
+												-> org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#doRegisterBeanDefinitions
+													-> org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#parseBeanDefinitions
+														-> org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#parseDefaultElement
+															-> org.springframework.beans.factory.xml.DefaultBeanDefinitionDocumentReader#processBeanDefinition
+																-> org.springframework.beans.factory.xml.BeanDefinitionParserDelegate#parseBeanDefinitionElement(org.w3c.dom.Element, org.springframework.beans.factory.config.BeanDefinition)
+																-> org.springframework.beans.factory.support.BeanDefinitionReaderUtils#registerBeanDefinition: Map<String, BeanDefinition> beanDefinitionMap
+
+
+DI入口：
+org.springframework.beans.factory.BeanFactory#getBean(java.lang.String)
+-> org.springframework.beans.factory.support.AbstractBeanFactory#getBean(java.lang.String)
+	-> org.springframework.beans.factory.support.AbstractBeanFactory#doGetBean
+		-> org.springframework.beans.factory.support.AbstractBeanFactory#createBean
+			-> org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#createBean(java.lang.String, org.springframework.beans.factory.support.RootBeanDefinition, java.lang.Object[])
+				-> org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#doCreateBean: BeanWrapper
+					-> org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#createBeanInstance
+						-> org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#instantiateBean
+							-> org.springframework.beans.factory.support.SimpleInstantiationStrategy#instantiate(org.springframework.beans.factory.support.RootBeanDefinition, java.lang.String, org.springframework.beans.factory.BeanFactory)
+							-> org.springframework.beans.factory.support.CglibSubclassingInstantiationStrategy#instantiateWithMethodInjection(org.springframework.beans.factory.support.RootBeanDefinition, java.lang.String, org.springframework.beans.factory.BeanFactory, java.lang.reflect.Constructor<?>, java.lang.Object...)
+					-> org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#populateBean
+						-> org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#applyPropertyValues
+							-> org.springframework.beans.PropertyAccessor#setPropertyValues(org.springframework.beans.PropertyValues)
+								-> org.springframework.beans.AbstractPropertyAccessor#setPropertyValues(org.springframework.beans.PropertyValues, boolean, boolean)
+									-> org.springframework.beans.AbstractNestablePropertyAccessor#setPropertyValue(java.lang.String, java.lang.Object)
+										-> org.springframework.beans.AbstractNestablePropertyAccessor#processLocalProperty
+											-> org.springframework.beans.BeanWrapperImpl.BeanPropertyHandler#setValue: 反射调用writeMethod
+					-> org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#initializeBean(java.lang.String, java.lang.Object, org.springframework.beans.factory.support.RootBeanDefinition)
+
+					
+					
+AOP入口：
+org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#initializeBean(java.lang.String, java.lang.Object, org.springframework.beans.factory.support.RootBeanDefinition)
+-> org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#applyBeanPostProcessorsBeforeInitialization
+	-> org.springframework.beans.factory.config.BeanPostProcessor#postProcessBeforeInitialization
+		-> org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#postProcessAfterInitialization
+			-> org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#wrapIfNecessary
+				-> org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#getAdvicesAndAdvisorsForBean
+				-> org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator#createProxy
+					-> org.springframework.aop.framework.ProxyFactory#getProxy(java.lang.ClassLoader)
+						-> org.springframework.aop.framework.DefaultAopProxyFactory#createAopProxy
+						-> org.springframework.aop.framework.JdkDynamicAopProxy#invoke: org.aopalliance.intercept.Joinpoint#proceed
+						-> org.springframework.aop.framework.CglibAopProxy.FixedChainStaticTargetInterceptor#intercept:invocation.proceed();
+							-> org.springframework.aop.framework.ReflectiveMethodInvocation#proceed: 责任链
